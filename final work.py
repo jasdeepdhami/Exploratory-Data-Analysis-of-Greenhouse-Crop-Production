@@ -384,7 +384,7 @@ st.markdown("""
 • Bubble size shows how long the crop took to grow.\n
 • If no clear pattern, CO₂ isn't very important for yield.""")
 st.divider()
-st.subheader("4. Days to Maturity Vs Yield")
+st.subheader("4. Month of Harvest Vs Yield")
 filter_df["harvest_date"]=pd.to_datetime(filter_df["harvest_date"])
 new_df=filter_df.groupby(["harvest_date"],as_index=False)["yield_kg_per_m2"].mean()
 new_df["month"]=new_df["harvest_date"].dt.to_period('M')
