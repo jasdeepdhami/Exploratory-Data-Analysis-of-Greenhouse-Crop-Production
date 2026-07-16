@@ -9,55 +9,78 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+#Main Title
 st.title("🏡 Exploratory Analysis of Greenhouse Crop Production")
-st.write("#")
+st.markdown("---")
+#==============================================================================================================================================
+#Executive Summary
+#==============================================================================================================================================
 st.header("📄 Executive Summary")
-st.markdown("""This report analyzes 10,400 greenhouse harvest records across four crops — tomato, cucumber, pepper, and lettuce — examining how environmental conditions and fertilization affect yield. The data was clean, with no missing values across 20 variables.\n
-The clearest finding is that fertilizer, particularly nitrogen and potassium, is the strongest driver of yield, far outweighing environmental factors like CO₂, soil pH, or irrigation, which showed almost no correlation. Temperature had a moderate positive effect, and longer maturity periods generally produced higher yields.
-Among crops, tomatoes performed best (avg. 16.7 kg/m²), followed by cucumbers, peppers, and lettuce. Growing conditions across greenhouses were fairly consistent, making fertilizer strategy and crop choice the main factors behind yield differences.\n
-Overall, the results suggest fertilizer optimization offers the greatest potential for improving greenhouse productivity, though causal claims would need further experimental validation.""")
-st.subheader("🔑 Key Points")
-st.write("""• Dataset: 10,400 records, 4 crops, 5 greenhouses, no missing values\n
-• Top yield driver: Nitrogen fertilizer (strongest correlation), followed by potassium and phosphorus\n
-• Weak/no impact: CO₂, soil pH, irrigation, pest severity\n
-• Temperature: Moderate positive effect on yield\n
-• Best performing crop: Tomato (16.7 kg/m² avg.), also had the longest maturity period\n
-• Crop yield ranking: Tomato > Cucumber > Pepper > Lettuce\n
-• Growing conditions: Fairly uniform across greenhouses, isolating fertilizer/crop choice as key variables\n
-• Limitation: Findings are correlational, not causal — needs experimental validation\n
+st.markdown("""
+This comprehensive data science project analyzes environmental, agronomic, and yield data collected across
+thousands of greenhouse growing cycles. The analysis aims to uncover valuable insights about how climate
+conditions, cultivation inputs, and crop genetics interact to determine final crop yield.
+
+**🔑 Key Objectives:**
+- Understand yield performance patterns across different crop types and varieties
+- Analyze how climate variables (temperature, humidity, CO2, light) relate to yield outcomes
+- Examine the effect of cultivation inputs such as irrigation, fertilizer, and pest severity
+- Investigate seasonal and temporal trends in planting and yield
+- Identify hierarchical relationships between crop, variety, and greenhouse performance
+- Identify opportunities to optimize greenhouse operations for higher productivity
+
+**📦 Expected Deliverables:**
+- Interactive visualizations showcasing the greenhouse growing landscape
+- Statistical analysis of key climate and yield indicators
+- Actionable insights for greenhouse operators and agronomists
+- A cleaned, analysis-ready dataset with documented data quality treatment
 """)
-st.subheader("📦 Expected Deliverables")
-st.markdown("""• A cleaned and well-organized greenhouse crop production dataset ready for analysis.\n
-• An exploratory data analysis with meaningful visualizations to identify trends and patterns.\n
-• An interactive Streamlit dashboard for easy exploration and presentation of the data.\n
-• Key insights and recommendations to support improved greenhouse crop production and decision-making.""")
-st.divider()
-st.header("⚠️ Problem Description")
-st.subheader("🧩 Problem Statement")
-st.markdown("""Greenhouse crop production generates large amounts of data on environmental conditions, irrigation, fertilizer use, and crop yield. However, raw data alone is difficult to interpret and does not provide meaningful insights. This project applies Exploratory Data Analysis (EDA) to clean, analyze, and visualize the data, helping identify trends, relationships, and factors that influence crop productivity and support better decision-making.\n
-• Raw greenhouse data is difficult to interpret without analysis.\n
-• Multiple factors affect crop growth and yield.\n
-• Exploratory Data Analysis helps identify hidden trends and patterns.\n
-• Data visualizations simplify complex information for better understanding.\n
-• Insights from the analysis support improved greenhouse crop management.""")
+
+st.markdown("---")
+
+# ============================================================
+# Project Description
+# ============================================================
+st.header("💡 Project Description")
+
+st.subheader("⚠️ Problem Statement")
+st.markdown("""
+Controlled-environment agriculture is highly dependent on precise climate management and nutrient delivery,
+yet growers do not always have a clear, data-driven view of which factors most influence yield. This project
+leverages a comprehensive greenhouse crop yield dataset to provide insights that can help:
+
+- **Greenhouse Operators**: Optimize climate control, irrigation, and fertilization strategies
+- **Agronomists & Researchers**: Understand which growing conditions correlate most strongly with yield
+- **Farm Managers**: Plan planting schedules and crop/variety selection based on historical performance
+- **Investors**: Identify high-performing crop and variety combinations worth scaling
+""")
+
 st.subheader("🗂️ Dataset Overview")
-st.markdown("""The greenhouse crop production dataset provides comprehensive information on crop cultivation, environmental conditions, agricultural inputs, and production outcomes within a controlled greenhouse environment.\n
-***Dataset Description***\n
-• The dataset contains information related to greenhouse crop production and cultivation conditions.\n
-• It includes environmental, agricultural, and production-related variables collected for analysis.\n
-• The data is used to explore relationships between greenhouse conditions and crop yield.\n    
-***Dataset Size***\n
-• Number of Records: 5,000\n
-• Number of Features (Columns): 19\n
-***Data Types***\n
-• Categorical Data: Crop Type, Variety\n
-• Date Data: Planting Date, Harvest Date\n
-• Numerical Data: Environmental parameters, fertilizer usage, irrigation, soil pH, pest severity, and crop yield.\n
-***Purpose of the Dataset***\n
-• To analyze greenhouse crop production using exploratory data analysis techniques.\n
-• To identify trends, patterns, and correlations among production variables.\n
-• To evaluate the impact of environmental and agricultural factors on crop yield.\n
-• To support data-driven decision-making for improving greenhouse farming practices.  """)
+st.markdown("""
+The greenhouse crop yield dataset contains comprehensive information about individual growing cycles including:
+
+**Core Crop Information:**
+- Greenhouse identifiers
+- Crop type and variety
+- Planting and harvest dates, days to maturity
+
+**Climate Conditions:**
+- Average, minimum, and maximum temperature (°C)
+- Humidity percentage
+- CO2 concentration (ppm)
+- Light intensity (lux) and photoperiod (hours)
+
+**Cultivation Inputs:**
+- Irrigation amount (mm)
+- Fertilizer application: Nitrogen, Phosphorus, and Potassium (kg/ha)
+- Pest severity index
+- Soil pH
+
+**Outcome Metric:**
+- Yield in kilograms per square meter (yield_kg_per_m2)
+""")
+
+st.markdown("---")
 
 @st.cache_data
 def load():
@@ -78,45 +101,14 @@ with column2:
     st.metric("Total Columns",f"{df.shape[1]:,}")
 with column3:
     st.metric("Memory used",f"{memory:.2f}MB")
-
-
-
-@st.cache_data
-def load_cleandataset():
-    try:
-        cleaned_df=df.copy()
-        cleaned_df.head(1)
-        cleaned_df.info()
-        cleaned_df["crop_type"].unique()
-        cleaned_df["variety"].unique()
-        list(cleaned_df["planting_date"].unique())
-        cleaned_df.isnull().sum()
-        cleaned_df.describe()
-        cleaned_df.fillna({"avg_temperature_C":cleaned_df["avg_temperature_C"].mean()},inplace=True)
-        cleaned_df.fillna({"min_temperature_C":cleaned_df["min_temperature_C"].mean()},inplace=True)
-        cleaned_df.fillna({"max_temperature_C":cleaned_df["max_temperature_C"].median()},inplace=True)
-        cleaned_df.fillna({"humidity_percent":cleaned_df["humidity_percent"].mean()},inplace=True)
-        cleaned_df.fillna({"co2_ppm":cleaned_df["co2_ppm"].mean()},inplace=True)
-        cleaned_df.fillna({"light_intensity_lux":cleaned_df["light_intensity_lux"].mean()},inplace=True)
-        cleaned_df.fillna({"fertilizer_N_kg_ha":cleaned_df["fertilizer_N_kg_ha"].median()},inplace=True)
-        cleaned_df.fillna({"fertilizer_P_kg_ha":cleaned_df["fertilizer_P_kg_ha"].mean()},inplace=True)
-        cleaned_df.fillna({"fertilizer_K_kg_ha":cleaned_df["fertilizer_K_kg_ha"].median()},inplace=True)
-        cleaned_df.fillna({"pest_severity":cleaned_df["pest_severity"].mean()},inplace=True)
-        cleaned_df.fillna({"soil_pH":cleaned_df["soil_pH"].median()},inplace=True)
-        return cleaned_df
-    except:
-        st.error("Error in cleaning Dataset")
-clean_df=load_cleandataset()
-clean_df=clean_df.drop_duplicates()
-tab1,tab2,tab3,tab4,tab5,tab6,tab7=st.tabs(
+tab1,tab2,tab3,tab4,tab5,tab6=st.tabs(
     [
     "📋 Column Info",
     "❌ Missing Values",
     "👀 Sample Data",
     "📊 Statistics",
     "🔤 Categorical Data",
-    "✅ Data Quality",
-    "✨ Final Data"
+    "✅ Data Quality"
     ])
 with tab1:
     st.subheader("📋 Column Information")
@@ -134,26 +126,40 @@ with tab1:
         df.dtypes.value_counts().rename_axis("Data Type").reset_index(name="Count"),
         use_container_width=True
     )
+    st.subheader("Detailed Column Descriptions")
+    st.markdown("""
+        **Column Descriptions:**\n
+        • **greenhouse_id**: Identifier for the greenhouse where the crop was grown\n
+        • **crop_type**: Type of crop (Tomato, Cucumber, Pepper, Lettuce)\n
+        • **variety**: Specific variety of the crop\n
+        • **planting_date**: Date the crop was planted\n
+        • **harvest_date**: Date the crop was harvested\n
+        • **days_to_maturity**: Number of days from planting to harvest\n
+        • **avg_temperature_C / min_temperature_C / max_temperature_C**: Temperature readings during growth (°C)\n
+        • **humidity_percent**: Average relative humidity (%)\n
+        • **co2_ppm**: CO2 concentration (parts per million)\n
+        • **light_intensity_lux**: Average light intensity (lux)\n
+        • **photoperiod_hours**: Hours of light exposure per day\n
+        • **irrigation_mm**: Total irrigation applied (mm)\n
+        • **fertilizer_N_kg_ha / fertilizer_P_kg_ha / fertilizer_K_kg_ha**: Fertilizer application rates (kg/ha)\n
+        • **pest_severity**: Index representing severity of pest presence\n
+        • **soil_pH**: Soil pH level\n
+        • **yield_kg_per_m2**: Final crop yield (kg per square meter)\n
+        """)
 with tab2:
     st.subheader("❌ Missing Values Analysis")
-
-    missing = pd.DataFrame({
+    check=df.isnull().sum().sort_values(ascending=False)
+    if check.empty:
+        st.success("No null values encountered in Dataset")
+    else:
+        missing = pd.DataFrame({
         "Column": df.columns,
         "Missing Values": df.isnull().sum().values,
         "Missing %": ((df.isnull().sum()/len(df))*100).round(2)
-    })
+        })
+        st.dataframe(missing, use_container_width=True)
 
-    st.dataframe(missing, use_container_width=True)
-
-    fig = plt.bar(
-        missing,
-        x="Column",
-        y="Missing Values",
-        color="Missing Values",
-        title="Missing Values by Column"
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
+        st.bar_chart(missing.set_index("Column")["Missing %"])
 with tab3:
     st.subheader("👀 Sample Data")
 
@@ -198,9 +204,9 @@ with tab5:
 
     if "variety" in df.columns:
 
-        variety=df["variety"].value_counts().reset_index()
+        variety=df[["crop_type","variety"]].value_counts().reset_index()
 
-        variety.columns=["Variety","Count"]
+        variety.columns=["Crop Type","Variety","Count"]
 
         st.dataframe(variety,use_container_width=True)
 
@@ -210,7 +216,7 @@ with tab5:
 
             fig=plt.bar(
                 variety,
-                x="Variety",
+                x="Crop Type",
                 y="Count",
                 color="Variety",
                 title="Variety Distribution"
@@ -262,28 +268,236 @@ with tab6:
 
     st.dataframe(quality,use_container_width=True)
 
-    fig=plt.bar(
-        quality,
-        x="Column",
-        y="Completeness %",
-        color="Completeness %",
-        title="Column Completeness"
-    )
-
-    st.plotly_chart(fig,use_container_width=True)
-
-with tab7:
-    st.subheader("📈 Cleaned Dataset Basic Information")
-    memory1=clean_df.memory_usage(deep=True).sum()/(1024**2)
-    column1,column2,column3=st.columns(3)
-    with column1:
-        st.metric("Total Records",f"{clean_df.shape[0]:,}")
-    with column2:
-        st.metric("Total Columns",f"{clean_df.shape[1]:,}")
-    with column3:
-        st.metric("Memory used",f"{memory1:.2f}MB")
+    st.bar_chart(quality.set_index("Column")["Completeness %"])
 st.divider()
+st.header("Data Cleaning & Preprocessing")
+st.divider()
+@st.cache_data
+def load_cleandataset():
+    try:
+        cleaned_df=df.copy()
+        cleaned_df.head(1)
+        cleaned_df.info()
+        cleaned_df["crop_type"].unique()
+        cleaned_df["variety"].unique()
+        list(cleaned_df["planting_date"].unique())
+        cleaned_df.isnull().sum()
+        cleaned_df.describe()
+        cleaned_df.fillna({"avg_temperature_C":cleaned_df["avg_temperature_C"].mean()},inplace=True)
+        cleaned_df.fillna({"min_temperature_C":cleaned_df["min_temperature_C"].mean()},inplace=True)
+        cleaned_df.fillna({"max_temperature_C":cleaned_df["max_temperature_C"].median()},inplace=True)
+        cleaned_df.fillna({"humidity_percent":cleaned_df["humidity_percent"].mean()},inplace=True)
+        cleaned_df.fillna({"co2_ppm":cleaned_df["co2_ppm"].mean()},inplace=True)
+        cleaned_df.fillna({"light_intensity_lux":cleaned_df["light_intensity_lux"].mean()},inplace=True)
+        cleaned_df.fillna({"fertilizer_N_kg_ha":cleaned_df["fertilizer_N_kg_ha"].median()},inplace=True)
+        cleaned_df.fillna({"fertilizer_P_kg_ha":cleaned_df["fertilizer_P_kg_ha"].mean()},inplace=True)
+        cleaned_df.fillna({"fertilizer_K_kg_ha":cleaned_df["fertilizer_K_kg_ha"].median()},inplace=True)
+        cleaned_df.fillna({"pest_severity":cleaned_df["pest_severity"].mean()},inplace=True)
+        cleaned_df.fillna({"soil_pH":cleaned_df["soil_pH"].median()},inplace=True)
+        return cleaned_df
+    except:
+        st.error("Error in cleaning Dataset")
+clean_df=load_cleandataset()
+clean_df["harvest_date"]=pd.to_datetime(clean_df["harvest_date"])
 clean_df=clean_df.drop_duplicates()
+clean_tab1, clean_tab2 = st.tabs([
+        "🔧 Missing Values Treatment",
+        "🔍 Outlier Detection & Treatment"
+    ])
+with clean_tab1:
+    st.subheader("Missing Values Treatment")
+
+    st.write("**Data Cleaning Applied:**")
+    st.markdown("""
+        The following cleaning operations have been applied:\n
+        • **Date Parsing**: `planting_date` and `harvest_date` converted from `DD-MM-YY` text to proper dates\n
+        • **Climate Columns**: Humidity,min temperature and avg temperature, CO2, and light intensity values filled with the **mean within the same column** and missing temperature with max temperature values are filled with the **median within the same column**.\n
+        • **Fertilizer Columns**: Missing Nitrogen and Potassium application values filled with
+          crop-type medians and  Phosphorus with mean value\n
+        • **Pest Severity & Soil pH**: Missing values filled with crop-type mean\n
+        • **Remaining Numeric Columns**: Any values still missing after group-wise imputation filled with the
+          overall column mean
+        """)
+    st.subheader("Before vs After Cleaning Comparison")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.write("**Original Dataset:**")
+        original_nulls = df.isnull().sum().sum()
+        st.metric("Total Missing Values", f"{original_nulls:,}")
+
+    with col2:
+        st.write("**Cleaned Dataset:**")
+        cleaned_nulls = clean_df.isnull().sum().sum()
+        st.metric("Total Missing Values", f"{cleaned_nulls:,}")
+        reduction_pct = ((original_nulls - cleaned_nulls) / original_nulls * 100) if original_nulls > 0 else 0
+        st.metric("Reduction", f"{reduction_pct:.1f}%")
+
+    st.subheader("Data Cleaning Results")
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric("Original Records", f"{df.shape[0]:,}")
+    with col2:
+        st.metric("Cleaned Records", f"{clean_df.shape[0]:,}")
+    with col3:
+        rows_removed = df.shape[0] - clean_df.shape[0]
+        st.metric("Rows Removed", rows_removed)
+with clean_tab2:
+    st.subheader("Outlier Detection & Treatment")
+
+    @st.cache_data
+    def detect_and_treat_outliers(df_input):
+        """Detect and treat outliers using the IQR method"""
+        df_outliers_treated = df_input.copy()
+        outlier_summary = {}
+        numerical_cols = df_outliers_treated.select_dtypes(include="number").columns.tolist()
+        if "greenhouse_id" in numerical_cols:
+            numerical_cols.remove("greenhouse_id")
+        # numerical_cols = ['yield_kg_per_m2', 'avg_temperature_C', 'irrigation_mm']
+        # numerical_cols = [col for col in numerical_cols if col in df_outliers_treated.columns]
+
+        for col in numerical_cols:
+            col_data = df_outliers_treated[col].dropna()
+
+            if len(col_data) > 0:
+                Q1 = col_data.quantile(0.25)
+                Q3 = col_data.quantile(0.75)
+                IQR = Q3 - Q1
+                lower_bound = Q1 - 1.5 * IQR
+                upper_bound = Q3 + 1.5 * IQR
+
+                outliers_mask = (col_data < lower_bound) | (col_data > upper_bound)
+                outliers_count = outliers_mask.sum()
+                outliers_percentage = (outliers_count / len(col_data)) * 100
+
+                outlier_summary[col] = {
+                        'count': outliers_count,
+                        'percentage': outliers_percentage,
+                        'lower_bound': lower_bound,
+                        'upper_bound': upper_bound,
+                        'Q1': Q1,
+                        'Q3': Q3,
+                        'IQR': IQR
+                }
+
+                # Detect outliers in all numerical columns.
+                # Cap only irrigation_mm; keep other columns unchanged for analysis.
+                if col == 'irrigation_mm' and outliers_count > 0:
+                    df_outliers_treated[col] = df_outliers_treated[col].clip(
+                            lower=lower_bound, upper=upper_bound
+                    )
+                    outlier_summary[col]['treatment'] = 'Capped to IQR bounds'
+                else:
+                    outlier_summary[col]['treatment'] = 'No treatment applied (kept for analysis)'
+
+        return df_outliers_treated, outlier_summary
+
+    df_with_outliers_treated, outlier_info = detect_and_treat_outliers(clean_df)
+
+    st.write("**Outlier Detection Results:**")
+
+    if outlier_info:
+        outlier_summary_df = pd.DataFrame({
+                'Column': list(outlier_info.keys()),
+                'Outliers Count': [info['count'] for info in outlier_info.values()],
+                'Outliers %': [f"{info['percentage']:.2f}%" for info in outlier_info.values()],
+                'Lower Bound': [f"{info['lower_bound']:.2f}" for info in outlier_info.values()],
+                'Upper Bound': [f"{info['upper_bound']:.2f}" for info in outlier_info.values()],
+                'Treatment Applied': [info['treatment'] for info in outlier_info.values()]
+        })
+        st.dataframe(outlier_summary_df,use_container_width=True)
+
+        st.subheader("Outlier Visualizations")
+
+        for col in outlier_info.keys():
+            st.write(f"**{col.replace('_', ' ').title()}:**")
+
+            col_data = df_with_outliers_treated[col].dropna()
+            info = outlier_info[col]
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.write("**Box Plot Statistics:**")
+                box_stats = pd.DataFrame({
+                        'Statistic': ['Min', 'Q1', 'Median', 'Q3', 'Max'],
+                        'Value': [
+                            col_data.min(),
+                            info['Q1'],
+                            col_data.median(),
+                            info['Q3'],
+                            col_data.max()
+                        ]
+                })
+                st.dataframe(box_stats,use_container_width=True)
+
+                st.write("**Outlier Bounds:**")
+                st.write(f"Lower: {info['lower_bound']:.2f}")
+                st.write(f"Upper: {info['upper_bound']:.2f}")
+
+            with col2:
+                st.write("**Distribution:**")
+                bins = pd.cut(col_data, bins=20)
+                bin_counts = bins.value_counts().sort_index()
+                bin_labels = [f"{interval.left:.2f}-{interval.right:.2f}" for interval in bin_counts.index]
+
+                chart_data = pd.DataFrame({
+                        'Bin Range': bin_labels,
+                        'Count': bin_counts.values
+                }).set_index('Bin Range')
+
+                st.bar_chart(chart_data)
+
+                st.write("**Distribution Stats:**")
+                dist_stats = pd.DataFrame({
+                        'Metric': ['Mean', 'Std Dev', 'Skewness'],
+                        'Value': [
+                            f"{col_data.mean():.2f}",
+                            f"{col_data.std():.2f}",
+                            f"{col_data.skew():.2f}"
+                        ]
+                })
+                st.dataframe(dist_stats,use_container_width=True)
+
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                st.metric("Outliers", int(info['count']))
+            with col2:
+                st.metric("Outlier %", f"{info['percentage']:.2f}%")
+            with col3:
+                st.metric("IQR", f"{info['IQR']:.2f}")
+            with col4:
+                st.metric("Median", f"{col_data.median():.2f}")
+
+            st.markdown("---")
+    else:
+        st.info("No numerical columns available for outlier detection")
+
+st.subheader("Final Processed Dataset Summary")
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("Final Records", f"{clean_df.shape[0]:,}")
+with col2:
+    st.metric("Final Columns", clean_df.shape[1])
+with col3:
+    remaining_nulls = clean_df.isnull().sum().sum()
+    st.metric("Remaining Nulls", int(remaining_nulls))
+
+st.subheader("Column Summary")
+col_summary = pd.DataFrame({
+        'Column': clean_df.columns,
+        'Data Type': clean_df.dtypes.astype(str),
+        'Non-Null Count': clean_df.count(),
+        'Null Count': clean_df.isnull().sum(),
+        'Unique Values': clean_df.nunique()
+})
+st.dataframe(col_summary,use_container_width=True)
+st.divider()
+# ============================================================
+# Data Visualization & Insights
+# ============================================================
 if "selected_crop" not in st.session_state:
     st.session_state.selected_crop=sorted(clean_df["crop_type"].unique())
 if "selected_variety" not in st.session_state:
@@ -292,19 +506,25 @@ if "selected_yield" not in st.session_state:
     st.session_state.selected_yield=(float(clean_df["yield_kg_per_m2"].min()),float(clean_df["yield_kg_per_m2"].max()))
 if "selected_maturity" not in st.session_state:
     st.session_state.selected_maturity=(int(clean_df["days_to_maturity"].min()),int(clean_df["days_to_maturity"].max()))
-with st.sidebar:
+st.sidebar.header("Data Filters")
+st.sidebar.markdown("Use these filters to explore specific segments of the data:")
+st.sidebar.markdown("Tip: Set your desired filters and click 'Apply Filters' to update visualizations.")
+st.sidebar.markdown("---")
+with st.sidebar.form("Filter's Form"):
     st.write("🌽 Crop Filter")
     crop=st.multiselect(
         "Select the type of crop",
         options=sorted(clean_df["crop_type"].unique()),
         default=st.session_state.selected_crop
         )
+    st.divider()
     st.write("🌱 Variety Filter ")
     variety=st.multiselect(
         "Select the type of crop",
         options=sorted(clean_df["variety"].unique()),
         default=st.session_state.selected_variety
         )
+    st.divider()
     st.write("🌾 Yield Filter")
     Yield=st.slider(
         "Select the yield range ",
@@ -312,6 +532,7 @@ with st.sidebar:
         clean_df["yield_kg_per_m2"].max(),
         st.session_state.selected_yield
     )
+    st.divider()
     st.write("⏳ Days to Maturity Filter")
     maturity=st.slider(
         "Select the Days to Maturity Range",
@@ -319,11 +540,12 @@ with st.sidebar:
         clean_df["days_to_maturity"].max(),
         st.session_state.selected_maturity
     )
+    st.divider()
     col1,col2=st.columns(2)
     with col1:
-        apply=st.button("✅ Apply",type="primary")
+        apply=st.form_submit_button("✅ Apply Filters", type="primary", use_container_width=True)
     with col2:
-        reset=st.button("❌ Reset")
+        reset= st.form_submit_button("🔄 Reset Filters", use_container_width=True)
 if apply:
     st.session_state.selected_crop=crop
     st.session_state.selected_variety=variety
@@ -341,7 +563,16 @@ filter_df=clean_df[clean_df["crop_type"].isin(st.session_state.selected_crop) & 
 if filter_df.empty:
     st.warning("# No Data For Current Filter")
     st.stop()
-st.header("Visualization")
+st.header("Data Visualization")
+st.markdown("""
+    This section presents visualizations to uncover insights from the greenhouse crop yield dataset. Each plot
+    reveals a different aspect of how climate conditions, cultivation inputs, and crop genetics interact to
+    determine yield.\n
+
+    **Tip**: Use the filters in the sidebar to explore specific segments of the data. Set your desired filters
+    and click 'Apply Filters' to update visualizations!
+    """)
+#Plot 1
 st.subheader(" 1. Avg. Yield by Crop Type & Variety")
 new_df=filter_df.groupby(["crop_type","variety"],as_index=False)["yield_kg_per_m2"].mean()
 graph1=plt.bar(new_df,x="crop_type",y="yield_kg_per_m2",color="crop_type",title="Bar Graph")
@@ -356,6 +587,7 @@ st.markdown("""
 • Quick way to rank crops — helps decide which crop is most "worth growing" for output \n                                
 • Easy way to see the "best" crop at a glance.""")
 st.divider()
+#Plot 2
 st.subheader("2. Temperature Vs Yield")
 new_df=new_df=filter_df.groupby(["crop_type","avg_temperature_C"],as_index=False)["yield_kg_per_m2"].mean()
 graph2=plt.scatter(new_df,x="avg_temperature_C",y="yield_kg_per_m2",color="crop_type",title="Scatter Plot")
@@ -370,6 +602,7 @@ st.markdown("""
 • If dots go up, temperature helps yield. If dots are messy, temperature doesn't matter much.\n                                        
 • Comparing crops on the same chart shows if different crops have different "ideal" temperature zones.""")
 st.divider()
+#Plot 3
 st.subheader("3. CO2 Vs Yield")
 new_df=filter_df.groupby("days_to_maturity",as_index=False)[["yield_kg_per_m2","co2_ppm"]].mean()
 graph3=plt.scatter(new_df,x="co2_ppm",y="yield_kg_per_m2",size="days_to_maturity",title="Bubble Chart",color="co2_ppm")
@@ -384,8 +617,8 @@ st.markdown("""
 • Bubble size shows how long the crop took to grow.\n
 • If no clear pattern, CO₂ isn't very important for yield.""")
 st.divider()
+#Plot 4
 st.subheader("4. Month of Harvest Vs Yield")
-filter_df["harvest_date"]=pd.to_datetime(filter_df["harvest_date"])
 new_df=filter_df.groupby(["harvest_date"],as_index=False)["yield_kg_per_m2"].mean()
 new_df["month"]=new_df["harvest_date"].dt.to_period('M')
 new_df["month"]=new_df["month"].astype(str)
@@ -402,6 +635,7 @@ st.markdown("""
 • Line going up = longer growing time = better yield.\n
 • Helps decide if it's worth extending growing time for better output, or if yield plateaus after a point.\n""")
 st.divider()
+#Plot 5
 st.subheader("5. Temperature Vs Humidity")
 new_df=filter_df.groupby("days_to_maturity",as_index=False)[["avg_temperature_C","humidity_percent"]].mean()
 graph5=plt.density_heatmap(new_df,x="avg_temperature_C",y="humidity_percent")
@@ -416,6 +650,7 @@ st.markdown("""
 • Helps check if greenhouse conditions stay steady or change a lot.\n
 • Helps spot whether extreme or unusual temperature-humidity combos are rare or common, which matters for reliability of other findings.""")
 st.divider()
+#Plot 6
 st.subheader("6. Crop → Variety → Greenhouse (Days To Maturity)")
 new_df=filter_df.groupby(["crop_type","variety","greenhouse_id"],as_index=False)["days_to_maturity"].mean()
 new_df["days_to_maturity"]=new_df["days_to_maturity"].astype(int)
@@ -428,6 +663,7 @@ st.markdown("""
 • Useful for spotting if a specific greenhouse consistently produces slower- or faster-maturing batches.
 """)
 st.divider()
+#Plot 7
 st.subheader("7. Crop → Variety → Yield")
 new_df=filter_df.groupby(["crop_type","variety"],as_index=False)[["yield_kg_per_m2","days_to_maturity"]].median()
 new_df["days_to_maturity"]=new_df["days_to_maturity"].astype(int)
@@ -439,6 +675,7 @@ st.markdown("""
 • Quick way to see best and worst crop varieties.\n                       
 • Good for identifying underperforming varieties that might need review or could be phased out.""")
 st.divider()
+#Plot 8
 st.subheader("8. Yield Spread by Variety")
 graph8=plt.violin(filter_df,x="variety",y="yield_kg_per_m2",color="variety")
 graph8.update_layout(
@@ -452,6 +689,7 @@ st.markdown("""
 • Thin shape = consistent yield. Wide shape = unpredictable yield.\n
 • Helps identify varieties that are both high-yielding and dependable — often more valuable than just high average.""")
 st.divider()
+#Plot 9
 st.subheader("9. Yield by Crop and Greenhouse")
 graph9=plt.box(filter_df,x="crop_type",y="yield_kg_per_m2",color="greenhouse_id")
 graph9.update_layout(
@@ -465,6 +703,7 @@ st.markdown("""
 • Shows if one greenhouse does better or worse than others.\n
 • Dots outside the box are unusual results worth checking.""")
 st.divider()
+#Plot 10
 st.subheader("10. Light Vs Maturity Vs Photoperiod")
 new_df=filter_df.groupby(["crop_type","greenhouse_id","days_to_maturity"],as_index=False)[["days_to_maturity","light_intensity_lux","photoperiod_hours"]].mean()
 graph10=plt.scatter_3d(new_df,x="days_to_maturity",y="light_intensity_lux",z="photoperiod_hours",color="crop_type",title="Scatter 3D Plot")
@@ -484,7 +723,38 @@ st.markdown("""
 • Different crop colors show different light needs.\n
 • Helps evaluate whether adjusting lighting setups (intensity or day-length) could speed up or optimize growing cycles.""")
 st.divider()
-st.header("Conclusion")
+#Plot 11
+st.header("11.Fertilizer Composition for High Yield Crops")
+filter_df["Yield Category"] = pd.qcut(
+    filter_df["yield_kg_per_m2"],
+    q=3,
+    labels=["Low", "Medium", "High"]
+)
+high = filter_df[filter_df["Yield Category"] == "High"]
+fertilizer = pd.DataFrame({
+    "Fertilizer": ["Nitrogen", "Phosphorus", "Potassium"],
+    "Amount": [
+        high["fertilizer_N_kg_ha"].sum(),
+        high["fertilizer_P_kg_ha"].sum(),
+        high["fertilizer_K_kg_ha"].sum()
+    ]
+})
+graph11= plt.pie(
+    fertilizer,
+    names="Fertilizer",
+    values="Amount",
+    title="Pie Chart"
+)
+st.plotly_chart(graph11,use_container_width=True)
+st.subheader("👁️ Key Insight")
+st.markdown("""• Nitrogen contributes the largest share of fertilizer usage in the high-yield category, indicating its significant role in achieving higher crop productivity (if it is the largest slice in your chart.\n
+• Phosphorus and Potassium are also essential, but their usage is comparatively lower, showing that balanced nutrient application supports high yields.\n
+• High-yield crops are associated with a combination of N, P, and K fertilizers, highlighting the importance of balanced fertilization rather than relying on a single nutrient.""")
+st.divider()
+#===================================================
+#Conclusion and summary
+#===================================================
+st.header("Conclusion and Summary")
 st.markdown("""This project successfully demonstrated the use of Exploratory Data Analysis (EDA) to analyze greenhouse crop production data and identify the factors affecting crop yield. By applying data cleaning, preprocessing, visualization, and interactive dashboard development, the project transformed raw data into meaningful insights that support informed decision-making in greenhouse farming.
 **Key Conclusions:**
 • Successfully cleaned, processed, and analyzed the greenhouse crop production dataset using Python and Pandas.\n
@@ -508,3 +778,140 @@ Although this project provides valuable insights into greenhouse crop production
 • Incorporate external data sources such as weather forecasts, market prices, and energy consumption to support more comprehensive decision-making.\n
 • Enhance the dashboard with customizable visualizations, interactive reports, and mobile-friendly access to improve usability and accessibility.\n
 • Implement automated data collection and database integration to reduce manual data entry and ensure that analyses remain accurate and up to date.""")
+st.subheader("Data Analysis Summary")
+st.markdown("""
+This comprehensive analysis of the greenhouse crop yield dataset has revealed significant insights into how
+climate conditions, cultivation inputs, and crop genetics interact to shape productivity. Through ten diverse
+visualizations and statistical analyses, we have uncovered valuable patterns that can guide greenhouse
+operations and crop planning.
+""")
+
+st.subheader("Major Findings & Insights")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
+    ### **Crop & Variety Performance**
+    - **Yield Variation**: Average yield differs meaningfully across crop types
+    - **Consistency**: Some varieties show tighter, more predictable yield distributions than others
+    - **Top Performers**: The treemap and sunburst views help identify the highest-yielding crop/variety
+      combinations
+    - **Distribution Shape**: Yield is not uniformly distributed — certain ranges are far more common than others
+
+    ### **Climate Relationships**
+    - **Temperature Effects**: Yield shows a relationship with average growing temperature that varies by crop
+    - **CO₂ & Light Interaction**: Combining CO₂ enrichment with light intensity affects yield outcomes jointly
+    - **Humidity Patterns**: Common temperature-humidity combinations cluster around typical greenhouse
+      operating conditions
+    """)
+
+with col2:
+    st.markdown("""
+    ### **Temporal Trends**
+    - **Seasonality**: Average yield fluctuates across planting months, suggesting seasonal effects on growth
+    - **Planning Implications**: Identifying favorable planting windows can help schedule future crop cycles
+
+    ### **Data Quality**
+    - **Missing Data**: Several climate and fertilizer columns required crop-specific median imputation
+    - **Outliers**: IQR-based detection identified extreme values in yield, temperature, and irrigation
+    - **Clean Baseline**: The processed dataset provides a reliable foundation for further analysis
+
+    ### **Operational Opportunities**
+    - **Climate Control**: Fine-tuning temperature, humidity, and CO₂ levels can help maximize yield
+    - **Variety Selection**: Favoring consistently high-yielding varieties can reduce output variability
+    """)
+
+st.markdown("---")
+
+st.subheader("Business Implications & Recommendations")
+
+with st.expander("**For Greenhouse Operators**", expanded=True):
+    st.markdown("""
+    **Strategic Recommendations:**
+
+    1. **Climate Management**:
+       - Maintain temperature and humidity within the ranges shown to correlate with higher yields
+       - Use CO₂ enrichment alongside adequate lighting to boost productivity
+
+    2. **Crop & Variety Selection**:
+       - Prioritize greenhouse space for consistently high-yielding crop/variety combinations
+       - Monitor yield variability within varieties to identify the most reliable performers
+
+    3. **Planting Schedule**:
+       - Align planting dates with the months historically associated with higher average yield
+       - Track pest severity and soil pH to catch conditions that may suppress yield early
+
+    4. **Continuous Monitoring**:
+       - Regularly log environmental and input data to keep the yield model current
+       - Use outlier detection to flag unusual growing cycles for investigation
+    """)
+
+with st.expander("**For Agronomists & Researchers**"):
+    st.markdown("""
+    **Research Insights:**
+
+    1. **Growing Condition Analysis**:
+       - Temperature, humidity, CO₂, and light intensity each play measurable roles in yield outcomes
+       - Interaction effects (e.g., CO₂ combined with light) may matter more than single-factor analysis
+
+    2. **Variety Trials**:
+       - Yield distribution differences across varieties suggest genetic or management factors worth studying
+       - Violin plots reveal not just averages but full performance ranges, useful for trial design
+
+    3. **Data Collection Priorities**:
+       - Columns with high missingness (fertilizer inputs, CO₂) may benefit from more consistent sensor logging
+       - Soil pH and pest severity trends deserve deeper longitudinal study
+    """)
+
+with st.expander("**For Farm Managers & Investors**"):
+    st.markdown("""
+    **Investment & Planning Opportunities:**
+
+    1. **Resource Allocation**:
+       - Direct greenhouse capacity toward crop/variety combinations with strong, consistent yield
+       - Evaluate underperforming greenhouses identified in the hierarchical breakdown
+
+    2. **Risk Assessment**:
+       - Wide yield distributions for certain varieties suggest higher production risk
+       - Seasonal yield trends can inform staffing and input procurement schedules
+
+    3. **Scalability**:
+       - Varieties with narrow, high-median yield distributions are strong candidates for scaling up
+       - Data-driven climate control investments can pay off where yield sensitivity to temperature/humidity
+         is highest
+    """)
+
+st.markdown("---")
+st.subheader("Final Conclusion")
+
+col1, col2, col3= st.columns(3)
+
+with col1:
+    st.metric("Crop Types Analyzed", clean_df["crop_type"].nunique())
+with col2:
+    st.metric("Varieties Analyzed", clean_df["variety"].nunique())
+with col3:
+    st.metric("Greenhouses Analyzed", clean_df["greenhouse_id"].nunique())
+col4,col5=st.columns(2)
+with col4:
+    st.metric("Avg Yield", f"{clean_df['yield_kg_per_m2'].mean():.2f} kg/m²")
+with col5:
+    st.metric("Max Yield", f"{clean_df['yield_kg_per_m2'].max():.2f} kg/m²")
+
+st.markdown("""
+### **Project Impact**\n
+
+This analysis provides greenhouse operators, agronomists, and investors with a data-driven view of how growing
+conditions and crop choices interact to determine yield. By identifying the strongest climate and input
+relationships, decision-makers can make more informed choices about crop selection, climate control, and
+planting schedules to improve productivity.\n
+
+**Key Takeaways:**\n
+
+1. **Data-Driven Decision Making**: Greenhouses that leverage climate and yield data can optimize operations\n
+2. **Climate Optimization**: Temperature, humidity, CO₂, and light intensity together shape yield outcomes\n
+3. **Variety Selection Matters**: Consistent, high-yielding varieties reduce production risk\n
+4. **Seasonal Planning**: Planting-date trends can guide more effective crop scheduling\n
+5. **Data Quality Foundation**: Careful cleaning and outlier treatment ensure reliable, trustworthy analysis
+""")
