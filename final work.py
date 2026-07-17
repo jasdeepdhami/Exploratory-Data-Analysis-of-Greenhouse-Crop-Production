@@ -10,7 +10,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 #Main Title
-st.title("Demo Title")
 st.title("🏡 Exploratory Analysis of Greenhouse Crop Production")
 st.markdown("---")
 #==============================================================================================================================================
