@@ -3,6 +3,31 @@ import pandas as pd
 import plotly.express as plt
 import datetime as dt
 import numpy as np
+import base64
+
+def set_background(image_file):
+    with open(image_file, "rb") as file:
+        img = base64.b64encode(file.read()).decode()
+
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background:
+                linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.8
+                )),
+                url("data:image/png;base64,{img}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+set_background("greenhouse.png")
 st.set_page_config(
     page_title="Exploratory Analysis of Greenhouse Crop Production",
     page_icon="🏡",

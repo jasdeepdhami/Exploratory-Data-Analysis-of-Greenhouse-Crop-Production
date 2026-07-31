@@ -2,4 +2,5 @@ numpy
 pandas
 matplotlib
 seaborn
-plotly
+Plotly
+base64
