@@ -29,13 +29,13 @@ def set_background(image_file):
 
 set_background("greenhouse.png")
 st.set_page_config(
-    page_title="Exploratory Analysis of Greenhouse Crop Production",
+    page_title="Exploratory Data Analysis of Greenhouse Crop Production",
     page_icon="🏡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 #Main Title
-st.title("🏡 Exploratory Analysis of Greenhouse Crop Production")
+st.title("🏡 Exploratory Data Analysis of Greenhouse Crop Production")
 st.markdown("---")
 #==============================================================================================================================================
 #Executive Summary
