@@ -578,7 +578,8 @@ new_df=filter_df.groupby(["crop_type","variety"],as_index=False)["yield_kg_per_m
 graph1=plt.bar(new_df,x="crop_type",y="yield_kg_per_m2",color="crop_type",title="Bar Graph")
 graph1.update_layout(
     xaxis_title="Crop Type",
-    yaxis_title="Yield"
+    yaxis_title="Yield",
+    plot_bgcolor="#F3FAF4"
 )
 st.plotly_chart(graph1, use_container_width=True)
 st.subheader("👁️ Key Insight")
@@ -593,7 +594,8 @@ new_df=new_df=filter_df.groupby(["crop_type","avg_temperature_C"],as_index=False
 graph2=plt.scatter(new_df,x="avg_temperature_C",y="yield_kg_per_m2",color="crop_type",title="Scatter Plot")
 graph2.update_layout(
     xaxis_title="Avg. Temperature ℃",
-    yaxis_title="Yield"
+    yaxis_title="Yield",
+    plot_bgcolor="#F3FAF4"
 )
 st.plotly_chart(graph2,use_container_width=True)
 st.subheader("👁️ Key Insight")
@@ -608,7 +610,8 @@ new_df=filter_df.groupby("days_to_maturity",as_index=False)[["yield_kg_per_m2","
 graph3=plt.scatter(new_df,x="co2_ppm",y="yield_kg_per_m2",size="days_to_maturity",title="Bubble Chart",color="co2_ppm")
 graph3.update_layout(
     xaxis_title="Co2 PPM",
-    yaxis_title="Yield"
+    yaxis_title="Yield",
+    plot_bgcolor="#F3FAF4"
 )
 st.plotly_chart(graph3,use_container_width=True)
 st.header("👁️ Key Insight")
@@ -626,7 +629,8 @@ graph4=plt.line(new_df,x="month",y="yield_kg_per_m2",title="Line Plot")
 graph4.update_layout(
     height=600,
     xaxis_title="Month",
-    yaxis_title="Yield"
+    yaxis_title="Yield",
+    plot_bgcolor="#F3FAF4"
 )
 st.plotly_chart(graph4,use_container_width=True)
 st.header("👁️ Key Insight")
@@ -641,7 +645,8 @@ new_df=filter_df.groupby("days_to_maturity",as_index=False)[["avg_temperature_C"
 graph5=plt.density_heatmap(new_df,x="avg_temperature_C",y="humidity_percent")
 graph5.update_layout(
     xaxis_title="Avg. Temperature ℃",
-    yaxis_title="Humidity %"
+    yaxis_title="Humidity %",
+    plot_bgcolor="#F3FAF4"
 )
 st.plotly_chart(graph5,use_container_width=True)
 st.header("👁️ Key Insight")
@@ -655,6 +660,9 @@ st.subheader("6. Crop → Variety → Greenhouse (Days To Maturity)")
 new_df=filter_df.groupby(["crop_type","variety","greenhouse_id"],as_index=False)["days_to_maturity"].mean()
 new_df["days_to_maturity"]=new_df["days_to_maturity"].astype(int)
 graph6=plt.sunburst(new_df,path=["crop_type","variety","greenhouse_id"],values="days_to_maturity",title="Sunburst")
+graph6.update_layout(
+    paper_bgcolor="#F3FAF4"
+)
 st.plotly_chart(graph6,use_container_width=True)
 st.header("👁️ Key Insight")
 st.markdown("""
@@ -668,6 +676,9 @@ st.subheader("7. Crop → Variety → Yield")
 new_df=filter_df.groupby(["crop_type","variety"],as_index=False)[["yield_kg_per_m2","days_to_maturity"]].median()
 new_df["days_to_maturity"]=new_df["days_to_maturity"].astype(int)
 graph7=plt.treemap(new_df,path=["crop_type","variety","yield_kg_per_m2"],values="yield_kg_per_m2",hover_data=["days_to_maturity"],title="Treemap")
+graph7.update_layout(
+    paper_bgcolor="#F3FAF4"
+)
 st.plotly_chart(graph7,use_container_width=True)
 st.header("👁️ Key Insight")
 st.markdown("""
@@ -680,7 +691,8 @@ st.subheader("8. Yield Spread by Variety")
 graph8=plt.violin(filter_df,x="variety",y="yield_kg_per_m2",color="variety")
 graph8.update_layout(
     xaxis_title="Variety",
-    yaxis_title="Yield"
+    yaxis_title="Yield",
+    plot_bgcolor="#F3FAF4"
 )
 st.plotly_chart(graph8,use_container_width=True)
 st.header("👁️ Key Insight")
@@ -694,7 +706,8 @@ st.subheader("9. Yield by Crop and Greenhouse")
 graph9=plt.box(filter_df,x="crop_type",y="yield_kg_per_m2",color="greenhouse_id")
 graph9.update_layout(
     xaxis_title="Crop Type",
-    yaxis_title="Yield"
+    yaxis_title="Yield",
+    plot_bgcolor="#F3FAF4"
 )
 st.plotly_chart(graph9,use_container_width=True)
 st.header("👁️ Key Insight")
@@ -708,6 +721,7 @@ st.subheader("10. Light Vs Maturity Vs Photoperiod")
 new_df=filter_df.groupby(["crop_type","greenhouse_id","days_to_maturity"],as_index=False)[["days_to_maturity","light_intensity_lux","photoperiod_hours"]].mean()
 graph10=plt.scatter_3d(new_df,x="days_to_maturity",y="light_intensity_lux",z="photoperiod_hours",color="crop_type",title="Scatter 3D Plot")
 graph10.update_layout(
+    paper_bgcolor="#F3FAF4",
     height=800,
     width=800,
     xaxis_title="Days to Maturity",
@@ -744,6 +758,9 @@ graph11= plt.pie(
     names="Fertilizer",
     values="Amount",
     title="Pie Chart"
+)
+graph11.update_layout(
+    paper_bgcolor="#F3FAF4"
 )
 st.plotly_chart(graph11,use_container_width=True)
 st.subheader("👁️ Key Insight")
